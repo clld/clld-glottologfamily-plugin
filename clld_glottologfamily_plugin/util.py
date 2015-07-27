@@ -18,11 +18,11 @@ class LanguageByFamilyMapMarker(MapMarker):
         if ILanguage.providedBy(ctx):
             if ctx.family:
                 return ctx.family.jsondata['icon']
-            return ISOLATES_ICON
+            return req.registry.settings.get('clld.isolates_icon', ISOLATES_ICON)
         return super(LanguageByFamilyMapMarker, self).get_icon(ctx, req)
 
 
-def load_families(data, languages):
+def load_families(data, languages, icons=ORDERED_ICONS, isolates_icon=ISOLATES_ICON):
     """Add Family objects to a database and update Language object from Glottolog.
 
     Family information is retrieved from Glottolog based on the id attribute of a
@@ -31,7 +31,7 @@ def load_families(data, languages):
     :param data:
     :return:
     """
-    icons = cycle([i for i in ORDERED_ICONS if i.name != ISOLATES_ICON])
+    icons = cycle([getattr(i, 'name', i) for i in icons if getattr(i, 'name', i) != isolates_icon])
     glottolog = Glottolog()
 
     for language in languages:
@@ -51,7 +51,7 @@ def load_families(data, languages):
                         id=gl_family.id,
                         name=gl_family.name,
                         description='',
-                        jsondata=dict(icon=icons.next().name))
+                        jsondata=dict(icon=icons.next()))
                 language.family = family
             language.macroarea = gl_language['macroareas'].values()[0]
             add_language_codes(
