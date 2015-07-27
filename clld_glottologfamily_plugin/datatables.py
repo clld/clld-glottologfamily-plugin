@@ -22,7 +22,7 @@ class MacroareaCol(Col):
         return icontains(self._col, qs)
 
     def format(self, item):
-        return item.macroarea
+        return self.get_obj(item).macroarea
 
 
 class FamilyCol(Col):
@@ -42,5 +42,6 @@ class FamilyCol(Col):
         return Family.id == qs
 
     def format(self, item):
+        item = self.get_obj(item)
         label = item.family.name if item.family else 'isolate'
         return HTML.div(map_marker_img(self.dt.req, item), ' ', label)

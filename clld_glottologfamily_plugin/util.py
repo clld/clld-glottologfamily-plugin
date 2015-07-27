@@ -57,5 +57,5 @@ def load_families(data, languages):
             add_language_codes(
                 data, language, gl_language.get('iso639-3'), glottocode=gl_language.id)
             for attr in 'latitude', 'longitude', 'name':
-                if not getattr(language, attr) and gl_language.get('attr') is not None:
+                if getattr(language, attr) is None and gl_language.get(attr) is not None:
                     setattr(language, attr, gl_language[attr])
