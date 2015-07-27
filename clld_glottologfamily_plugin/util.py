@@ -35,7 +35,11 @@ def load_families(data, languages):
     glottolog = Glottolog()
 
     for language in languages:
-        gl_language = glottolog.languoid(language.id)
+        if isinstance(language, (tuple, list)) and len(language) == 2:
+            code, language = language
+        else:
+            code = language.id
+        gl_language = glottolog.languoid(code)
         if gl_language:
             gl_family = gl_language.get_family(glottolog)
             if gl_family:
