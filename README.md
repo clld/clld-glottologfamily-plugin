@@ -4,6 +4,7 @@
 [Glottolog](http://glottolog.org) to a *clld* app to allow for better navigation and 
 visualization.
 
+[![Build Status](https://travis-ci.org/clld/clld-glottologfamily-plugin.svg?branch=master)](https://travis-ci.org/clld/clld-glottologfamily-plugin)
 
 ## Usage
 
