@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 
 requires = [
-    'clld>=1.1.0',
+    'clld>=1.2.1',
     'clldclient>=0.6',
 ]
 
@@ -12,7 +12,7 @@ tests_require = [
 
 setup(
     name='clld-glottologfamily-plugin',
-    version='0.4',
+    version='1.0',
     description='clld-glottologfamily-plugin',
     classifiers=[
         "Programming Language :: Python",

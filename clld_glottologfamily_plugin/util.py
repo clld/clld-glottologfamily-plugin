@@ -4,6 +4,7 @@ from itertools import cycle
 from clld.web.icon import ORDERED_ICONS, MapMarker
 from clld.scripts.util import add_language_codes
 from clld.interfaces import ILanguage
+from clld.db.models.common import IdentifierType, Identifier
 
 from clldclient.glottolog import Glottolog
 
@@ -50,7 +51,8 @@ def load_families(data, languages, icons=ORDERED_ICONS, isolates_icon=ISOLATES_I
                         gl_family.id,
                         id=gl_family.id,
                         name=gl_family.name,
-                        description='',
+                        description=Identifier(
+                            name=gl_family.id, type=IdentifierType.glottolog.value).url(),
                         jsondata=dict(icon=icons.next()))
                 language.family = family
             language.macroarea = gl_language['macroareas'].values()[0]

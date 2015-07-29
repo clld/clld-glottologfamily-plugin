@@ -1,3 +1,4 @@
+from zope.interface import implementer
 from sqlalchemy import (
     Column,
     Unicode,
@@ -10,7 +11,10 @@ from sqlalchemy.ext.declarative import declared_attr
 from clld.db.meta import Base
 from clld.db.models.common import IdNameDescriptionMixin
 
+from clld_glottologfamily_plugin.interfaces import IFamily
 
+
+@implementer(IFamily)
 class Family(Base, IdNameDescriptionMixin):
     @property
     def url(self):
