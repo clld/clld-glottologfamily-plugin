@@ -9,5 +9,7 @@ install:
 script:
   - python setup.py install
   - nosetests --with-coverage --cover-package=clld_glottologfamily_plugin --with-doctest
+before_install:
+  pip install codecov
 after_success:
-  - coveralls
+  codecov
