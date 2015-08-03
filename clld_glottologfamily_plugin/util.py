@@ -42,7 +42,7 @@ def load_families(data, languages, icons=ORDERED_ICONS, isolates_icon=ISOLATES_I
             code = language.id
         gl_language = glottolog.languoid(code)
         if gl_language:
-            gl_family = gl_language.get_family(glottolog)
+            gl_family = gl_language.family
             if gl_family:
                 family = data['Family'].get(gl_family.id)
                 if not family:
@@ -55,9 +55,10 @@ def load_families(data, languages, icons=ORDERED_ICONS, isolates_icon=ISOLATES_I
                             name=gl_family.id, type=IdentifierType.glottolog.value).url(),
                         jsondata=dict(icon=icons.next()))
                 language.family = family
-            language.macroarea = gl_language['macroareas'].values()[0]
+
+            language.macroarea = gl_language.macroareas[0]
             add_language_codes(
-                data, language, gl_language.get('iso639-3'), glottocode=gl_language.id)
+                data, language, gl_language.iso_code, glottocode=gl_language.id)
             for attr in 'latitude', 'longitude', 'name':
-                if getattr(language, attr) is None and gl_language.get(attr) is not None:
-                    setattr(language, attr, gl_language[attr])
+                if getattr(language, attr) is None:
+                    setattr(language, attr, getattr(gl_language, attr))
