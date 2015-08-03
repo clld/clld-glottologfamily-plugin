@@ -5,7 +5,6 @@
 visualization.
 
 [![Build Status](https://travis-ci.org/clld/clld-glottologfamily-plugin.svg?branch=master)](https://travis-ci.org/clld/clld-glottologfamily-plugin)
-
 [![codecov.io](http://codecov.io/github/clld/clld-glottologfamily-plugin/coverage.svg?branch=master)](http://codecov.io/github/clld/clld-glottologfamily-plugin?branch=master)
 
 ## Usage
