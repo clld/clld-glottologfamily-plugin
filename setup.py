@@ -2,6 +2,7 @@ from setuptools import setup, find_packages
 
 
 requires = [
+    'html5lib == 0.999999',
     'clld>=1.4.1',
     'clldclient>=1.0.1',
 ]

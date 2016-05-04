@@ -1,6 +1,8 @@
 from __future__ import unicode_literals
 from itertools import cycle
 
+from six import next
+
 from clld.web.icon import ORDERED_ICONS, MapMarker
 from clld.scripts.util import add_language_codes
 from clld.interfaces import ILanguage
@@ -23,7 +25,12 @@ class LanguageByFamilyMapMarker(MapMarker):
         return super(LanguageByFamilyMapMarker, self).get_icon(ctx, req)
 
 
-def load_families(data, languages, icons=ORDERED_ICONS, isolates_icon=ISOLATES_ICON):
+def load_families(
+        data,
+        languages,
+        glottolog=None,
+        icons=ORDERED_ICONS,
+        isolates_icon=ISOLATES_ICON):
     """Add Family objects to a database and update Language object from Glottolog.
 
     Family information is retrieved from Glottolog based on the id attribute of a
@@ -33,7 +40,7 @@ def load_families(data, languages, icons=ORDERED_ICONS, isolates_icon=ISOLATES_I
     :return:
     """
     icons = cycle([getattr(i, 'name', i) for i in icons if getattr(i, 'name', i) != isolates_icon])
-    glottolog = Glottolog()
+    glottolog = glottolog or Glottolog()
 
     for language in languages:
         if isinstance(language, (tuple, list)) and len(language) == 2:
@@ -53,7 +60,7 @@ def load_families(data, languages, icons=ORDERED_ICONS, isolates_icon=ISOLATES_I
                         name=gl_family.name,
                         description=Identifier(
                             name=gl_family.id, type=IdentifierType.glottolog.value).url(),
-                        jsondata=dict(icon=icons.next()))
+                        jsondata=dict(icon=next(icons)))
                 language.family = family
 
             language.macroarea = gl_language.macroareas[0]

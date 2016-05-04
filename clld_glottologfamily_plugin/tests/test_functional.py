@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 from pyramid.testing import Configurator
 from mock import MagicMock
 
+from clld.scripts.util import Data
 from clld.tests.util import TestWithDb, ExtendedTestApp
 from clld.db.meta import DBSession
 from clld.db.models import common
@@ -60,6 +61,27 @@ class Tests(_TestWithDb):
         q = DBSession.query(LanguageWithFamily).outerjoin(Family)
         assert q.filter(col.search('isolate')).all()
         assert q.filter(col.search('f')).order_by(col.order()).all()
+
+    def test_load_families(self):
+        from clld_glottologfamily_plugin.util import load_families
+
+        class Languoid(object):
+            id = 'abcd1234'
+            iso_code = 'abc'
+            name = 'language'
+            latitude = 1.0
+            longitude = 1.0
+            macroareas = ['Area']
+
+            @property
+            def family(self):
+                return self
+
+        class Glottolog(object):
+            def languoid(self, code):
+                return Languoid()
+
+        load_families(Data(), DBSession.query(LanguageWithFamily), glottolog=Glottolog())
 
     def test_includeme(self):
         config = Configurator(settings={
