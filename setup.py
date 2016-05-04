@@ -13,7 +13,7 @@ tests_require = [
 
 setup(
     name='clld-glottologfamily-plugin',
-    version='1.1',
+    version='1.2',
     description='clld-glottologfamily-plugin',
     classifiers=[
         "Programming Language :: Python",
