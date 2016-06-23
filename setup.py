@@ -21,7 +21,8 @@ setup(
     include_package_data=True,
     zip_safe=False,
     install_requires=[
-        'clld>=1.4.1',
+        'html5lib<1.0',
+        'clld>=2.2.2',
         'clldclient>=1.0.1',
     ],
     tests_require=[
