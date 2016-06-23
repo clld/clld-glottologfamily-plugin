@@ -20,7 +20,7 @@ class _TestWithDb(TestWithDb):
     def setUp(self):
         TestWithDb.setUp(self)
         DBSession.add(common.Dataset(id='d', name='test', domain='localhost'))
-        family = Family(id='f', name='family', description='desc')
+        family = Family(id='f', name='family', description='desc', jsondata=dict(icon=1))
         DBSession.add(LanguageWithFamily(id='l1', family=family))
         DBSession.add(LanguageWithFamily(id='l2'))
         DBSession.flush()
@@ -82,6 +82,18 @@ class Tests(_TestWithDb):
                 return Languoid()
 
         load_families(Data(), DBSession.query(LanguageWithFamily), glottolog=Glottolog())
+        load_families(
+            Data(),
+            [('abc', l) for l in DBSession.query(LanguageWithFamily)],
+            glottolog=Glottolog())
+
+    def test_LanguageByFamilyMapMarker(self):
+        from clld_glottologfamily_plugin.util import LanguageByFamilyMapMarker
+
+        marker = LanguageByFamilyMapMarker()
+        self.assertEqual(marker.get_icon(LanguageWithFamily.get('l1'), MagicMock()), 1)
+        self.assertNotEqual(marker.get_icon(LanguageWithFamily.get('l2'), MagicMock()), 1)
+        marker.get_icon(Family.first(), MagicMock())
 
     def test_includeme(self):
         config = Configurator(settings={
