@@ -50,6 +50,10 @@ def load_families(
         gl_language = glottolog.languoid(code)
         if gl_language:
             gl_family = gl_language.family
+            if not gl_family and getattr(gl_language, 'level', None) == 'family':
+                # Make sure top-level families are not treated as isolates!
+                gl_family = gl_language
+
             if gl_family:
                 family = data['Family'].get(gl_family.id)
                 if not family:

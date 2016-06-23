@@ -77,8 +77,23 @@ class Tests(_TestWithDb):
             def family(self):
                 return self
 
+        class TopLevelFamily(object):
+            id = 'abcd1234'
+            iso_code = 'abc'
+            name = 'family'
+            latitude = 1.0
+            longitude = 1.0
+            macroareas = ['Area']
+            level = 'family'
+
+            @property
+            def family(self):
+                return None
+
         class Glottolog(object):
             def languoid(self, code):
+                if code == 'abc':
+                    return TopLevelFamily()
                 return Languoid()
 
         load_families(Data(), DBSession.query(LanguageWithFamily), glottolog=Glottolog())
