@@ -1,10 +1,11 @@
 from __future__ import unicode_literals
+from unittest import TestCase
 
 from pyramid.testing import Configurator
 from mock import MagicMock
 
 from clld.scripts.util import Data
-from clld.tests.util import TestWithDb, ExtendedTestApp
+from clld.tests.util import ExtendedTestApp, WithDbMixin
 from clld.db.meta import DBSession
 from clld.db.models import common
 
@@ -14,11 +15,11 @@ from clld_glottologfamily_plugin.tests.fixtures import (
 )
 
 
-class _TestWithDb(TestWithDb):
+class _TestWithDb(WithDbMixin, TestCase):
     __with_custom_language__ = False
 
     def setUp(self):
-        TestWithDb.setUp(self)
+        super(_TestWithDb, self).setUp()
         DBSession.add(common.Dataset(id='d', name='test', domain='localhost'))
         family = Family(id='f', name='family', description='desc', jsondata=dict(icon=1))
         DBSession.add(LanguageWithFamily(id='l1', family=family))

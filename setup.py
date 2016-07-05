@@ -22,7 +22,7 @@ setup(
     zip_safe=False,
     install_requires=[
         'html5lib<1.0',
-        'clld>=2.2.2',
+        'clld>=3.0.1',
         'clldclient>=1.0.1',
     ],
     tests_require=[
