@@ -67,7 +67,7 @@ def load_families(
                         jsondata=dict(icon=next(icons)))
                 language.family = family
 
-            language.macroarea = gl_language.macroareas[0]
+            language.macroarea = gl_language.macroareas[0] if gl_language.macroareas else None
             add_language_codes(
                 data, language, gl_language.iso_code, glottocode=gl_language.id)
             for attr in 'latitude', 'longitude', 'name':
