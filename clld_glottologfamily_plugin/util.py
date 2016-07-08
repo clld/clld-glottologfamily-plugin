@@ -39,7 +39,8 @@ def load_families(
     :param data:
     :return:
     """
-    icons = cycle([getattr(i, 'name', i) for i in icons if getattr(i, 'name', i) != isolates_icon])
+    icons = cycle([getattr(i, 'name', i) for i in icons
+                   if getattr(i, 'name', i) != isolates_icon])
     glottolog = glottolog or Glottolog()
 
     for language in languages:
@@ -47,7 +48,8 @@ def load_families(
             code, language = language
         else:
             code = language.id
-        gl_language = glottolog.languoid(code)
+        gl_language = glottolog.get(code) \
+            if isinstance(glottolog, dict) else glottolog.languoid(code)
         if gl_language:
             gl_family = gl_language.family
             if not gl_family and getattr(gl_language, 'level', None) == 'family':
