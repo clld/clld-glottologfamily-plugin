@@ -29,6 +29,7 @@ class LanguageByFamilyMapMarker(MapMarker):
 def load_families(data,
                   languages,
                   glottolog_repos=None,
+                  strict=True,
                   icons=ORDERED_ICONS,
                   isolates_icon=ISOLATES_ICON):
     """Add Family objects to a database and update Language object from Glottolog.
@@ -48,29 +49,16 @@ def load_families(data,
         else:
             code = language.id
         gl_language = languoids_by_code.get(code)
+        if strict and not gl_language:
+            raise KeyError(code)
+        gl_family = None
         if gl_language:
             if not gl_language.lineage:
                 if gl_language.level == Level.family:
                     # Make sure top-level families are not treated as isolates!
                     gl_family = gl_language
-                else:
-                    gl_family = None
             else:
                 gl_family = languoids_by_code[gl_language.lineage[0][1]]
-
-            if gl_family:
-                family = data['Family'].get(gl_family.id)
-                if not family:
-                    family = data.add(
-                        Family,
-                        gl_family.id,
-                        id=gl_family.id,
-                        name=gl_family.name,
-                        description=Identifier(
-                            name=gl_family.id, type=IdentifierType.glottolog.value).url(),
-                        jsondata=dict(icon=next(icons)))
-                language.family = family
-
             language.macroarea = \
                 gl_language.macroareas[0].value if gl_language.macroareas else None
             add_language_codes(
@@ -78,3 +66,16 @@ def load_families(data,
             for attr in 'latitude', 'longitude', 'name':
                 if getattr(language, attr) is None:
                     setattr(language, attr, getattr(gl_language, attr))
+
+        if gl_family:
+            family = data['Family'].get(gl_family.id)
+            if not family:
+                family = data.add(
+                    Family,
+                    gl_family.id,
+                    id=gl_family.id,
+                    name=gl_family.name,
+                    description=Identifier(
+                        name=gl_family.id, type=IdentifierType.glottolog.value).url(),
+                    jsondata=dict(icon=next(icons)))
+            language.family = family

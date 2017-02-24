@@ -2,7 +2,7 @@ from __future__ import unicode_literals
 from unittest import TestCase
 
 from pyramid.testing import Configurator
-from mock import MagicMock, patch
+from mock import MagicMock, patch, Mock
 from pyglottolog.objects import Macroarea, Level
 
 from clld.scripts.util import Data
@@ -93,7 +93,7 @@ class Tests(_TestWithDb):
             level = Level.family
             lineage = []
 
-        class Glottolog(MagicMock):
+        class Glottolog(Mock):
             def languoids_by_code(self):
                 return dict(
                     l1=Languoid(),
@@ -102,10 +102,22 @@ class Tests(_TestWithDb):
                     abc=TopLevelFamily())
 
         with patch('clld_glottologfamily_plugin.util.Glottolog', Glottolog):
-            load_families(Data(), DBSession.query(LanguageWithFamily))
+            load_families(Data(), DBSession.query(LanguageWithFamily), strict=False)
             load_families(
                 Data(),
-                [('abc', l) for l in DBSession.query(LanguageWithFamily)])
+                [('abc', l) for l in DBSession.query(LanguageWithFamily)],
+                strict=False)
+
+    def test_load_families2(self):
+        from clld_glottologfamily_plugin.util import load_families
+
+        class Glottolog(Mock):
+            def languoids_by_code(self):
+                return {}
+
+        with patch('clld_glottologfamily_plugin.util.Glottolog', Glottolog):
+            with self.assertRaises(KeyError):
+                load_families(Data(), DBSession.query(LanguageWithFamily))
 
     def test_LanguageByFamilyMapMarker(self):
         from clld_glottologfamily_plugin.util import LanguageByFamilyMapMarker

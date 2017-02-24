@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='clld-glottologfamily-plugin',
-    version='2.0.0',
+    version='2.0.1',
     description='clld-glottologfamily-plugin',
     classifiers=[
         "Programming Language :: Python",
