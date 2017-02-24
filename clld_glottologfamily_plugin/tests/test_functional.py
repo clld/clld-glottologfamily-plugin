@@ -2,7 +2,8 @@ from __future__ import unicode_literals
 from unittest import TestCase
 
 from pyramid.testing import Configurator
-from mock import MagicMock
+from mock import MagicMock, patch
+from pyglottolog.objects import Macroarea, Level
 
 from clld.scripts.util import Data
 from clld.tests.util import ExtendedTestApp, WithDbMixin
@@ -24,6 +25,7 @@ class _TestWithDb(WithDbMixin, TestCase):
         family = Family(id='f', name='family', description='desc', jsondata=dict(icon=1))
         DBSession.add(LanguageWithFamily(id='l1', family=family))
         DBSession.add(LanguageWithFamily(id='l2'))
+        DBSession.add(LanguageWithFamily(id='abcd1236'))
         DBSession.flush()
 
 
@@ -66,42 +68,44 @@ class Tests(_TestWithDb):
     def test_load_families(self):
         from clld_glottologfamily_plugin.util import load_families
 
-        class Languoid(object):
-            id = 'abcd1234'
-            iso_code = 'abc'
+        class _L(object):
+            latitude = 1.0
+            longitude = 1.0
+            macroareas = [Macroarea.pacific]
+
+        class Isolate(_L):
+            id = 'abcd1236'
+            name = 'isolate'
+            iso = None
+            level = Level.language
+            lineage = []
+
+        class Languoid(_L):
+            id = 'abcd1235'
+            iso = 'abc'
             name = 'language'
-            latitude = 1.0
-            longitude = 1.0
-            macroareas = ['Area']
+            lineage = [('n', 'abcd1234', '')]
 
-            @property
-            def family(self):
-                return self
-
-        class TopLevelFamily(object):
+        class TopLevelFamily(_L):
             id = 'abcd1234'
-            iso_code = 'abc'
+            iso = 'abc'
             name = 'family'
-            latitude = 1.0
-            longitude = 1.0
-            macroareas = ['Area']
-            level = 'family'
+            level = Level.family
+            lineage = []
 
-            @property
-            def family(self):
-                return None
+        class Glottolog(MagicMock):
+            def languoids_by_code(self):
+                return dict(
+                    l1=Languoid(),
+                    abcd1236=Isolate(),
+                    abcd1234=TopLevelFamily(),
+                    abc=TopLevelFamily())
 
-        class Glottolog(object):
-            def languoid(self, code):
-                if code == 'abc':
-                    return TopLevelFamily()
-                return Languoid()
-
-        load_families(Data(), DBSession.query(LanguageWithFamily), glottolog=Glottolog())
-        load_families(
-            Data(),
-            [('abc', l) for l in DBSession.query(LanguageWithFamily)],
-            glottolog=Glottolog())
+        with patch('clld_glottologfamily_plugin.util.Glottolog', Glottolog):
+            load_families(Data(), DBSession.query(LanguageWithFamily))
+            load_families(
+                Data(),
+                [('abc', l) for l in DBSession.query(LanguageWithFamily)])
 
     def test_LanguageByFamilyMapMarker(self):
         from clld_glottologfamily_plugin.util import LanguageByFamilyMapMarker

@@ -8,7 +8,8 @@ from clld.scripts.util import add_language_codes
 from clld.interfaces import ILanguage
 from clld.db.models.common import IdentifierType, Identifier
 
-from clldclient.glottolog import Glottolog
+from pyglottolog.api import Glottolog
+from pyglottolog.objects import Level
 
 from clld_glottologfamily_plugin.models import Family
 
@@ -25,12 +26,11 @@ class LanguageByFamilyMapMarker(MapMarker):
         return super(LanguageByFamilyMapMarker, self).get_icon(ctx, req)
 
 
-def load_families(
-        data,
-        languages,
-        glottolog=None,
-        icons=ORDERED_ICONS,
-        isolates_icon=ISOLATES_ICON):
+def load_families(data,
+                  languages,
+                  glottolog_repos=None,
+                  icons=ORDERED_ICONS,
+                  isolates_icon=ISOLATES_ICON):
     """Add Family objects to a database and update Language object from Glottolog.
 
     Family information is retrieved from Glottolog based on the id attribute of a
@@ -41,20 +41,22 @@ def load_families(
     """
     icons = cycle([getattr(i, 'name', i) for i in icons
                    if getattr(i, 'name', i) != isolates_icon])
-    glottolog = glottolog or Glottolog()
-
+    languoids_by_code = Glottolog(glottolog_repos).languoids_by_code()
     for language in languages:
         if isinstance(language, (tuple, list)) and len(language) == 2:
             code, language = language
         else:
             code = language.id
-        gl_language = glottolog.get(code) \
-            if isinstance(glottolog, dict) else glottolog.languoid(code)
+        gl_language = languoids_by_code.get(code)
         if gl_language:
-            gl_family = gl_language.family
-            if not gl_family and getattr(gl_language, 'level', None) == 'family':
-                # Make sure top-level families are not treated as isolates!
-                gl_family = gl_language
+            if not gl_language.lineage:
+                if gl_language.level == Level.family:
+                    # Make sure top-level families are not treated as isolates!
+                    gl_family = gl_language
+                else:
+                    gl_family = None
+            else:
+                gl_family = languoids_by_code[gl_language.lineage[0][1]]
 
             if gl_family:
                 family = data['Family'].get(gl_family.id)
@@ -69,9 +71,10 @@ def load_families(
                         jsondata=dict(icon=next(icons)))
                 language.family = family
 
-            language.macroarea = gl_language.macroareas[0] if gl_language.macroareas else None
+            language.macroarea = \
+                gl_language.macroareas[0].value if gl_language.macroareas else None
             add_language_codes(
-                data, language, gl_language.iso_code, glottocode=gl_language.id)
+                data, language, gl_language.iso, glottocode=gl_language.id)
             for attr in 'latitude', 'longitude', 'name':
                 if getattr(language, attr) is None:
                     setattr(language, attr, getattr(gl_language, attr))
