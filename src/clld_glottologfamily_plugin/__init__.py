@@ -1,6 +1,5 @@
 from __future__ import unicode_literals
 
-from clld.web.adapters.base import Representation, Index
 from clld.web.adapters.rdf import Rdf, RdfIndex
 from clld.web.adapters.geojson import GeoJson
 from clld.web.maps import Map
@@ -16,8 +15,6 @@ def includeme(config):
         'clld_glottologfamily_plugin:templates')
 
     specs = [
-        [Representation, 'text/html', 'html', 'family/detail_html.mako', {}],
-        [Index, 'text/html', 'html', 'family/index_html.mako', {}],
         [RdfIndex, FORMATS['xml'].mimetype, FORMATS['xml'].extension, 'index_rdf.mako',
          {'rdflibname': FORMATS['xml'].name}]
     ]

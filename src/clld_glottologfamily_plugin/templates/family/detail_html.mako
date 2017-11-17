@@ -12,9 +12,7 @@
     </li>
 </ul>
 
-<h2>
-    Family ${ctx.name}
-</h2>
+<h2>Family ${ctx.name}</h2>
 
 ${request.map.render()}
 

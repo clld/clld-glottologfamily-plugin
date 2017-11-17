@@ -14,19 +14,29 @@ setup(
         "Topic :: Internet :: WWW/HTTP :: WSGI :: Application",
     ],
     author='Robert Forkel',
-    author_email='xrotwang@googlemail.com',
+    author_email='forkel@shh.mpg.de',
     url='https://github.com/clld/clld-glottologfamily-plugin',
     keywords='web pyramid pylons',
-    packages=find_packages(),
+    packages=find_packages(where="src"),
+    package_dir={"": "src"},
     include_package_data=True,
     zip_safe=False,
     install_requires=[
-        'clld>=3.0.1',
+        'clld>=3.3.3',
+        'sqlalchemy',
+        'zope.interface',
         'pyglottolog>=0.3.1',
     ],
-    tests_require=[
-        'mock>=2.0',
-    ],
-    test_suite="clld_glottologfamily_plugin",
-    entry_points="""\
-    """)
+    extras_require={
+        'dev': ['flake8', 'wheel', 'twine'],
+        'test': [
+            'pytest>=3.1',
+            'pytest-mock',
+            'mock',
+            'coverage>=4.2',
+            'pytest-cov',
+            'webtest',
+        ],
+    },
+    license="Apache 2.0",
+)
