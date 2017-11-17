@@ -6,7 +6,7 @@ visualization.
 
 [![Build Status](https://travis-ci.org/clld/clld-glottologfamily-plugin.svg?branch=master)](https://travis-ci.org/clld/clld-glottologfamily-plugin)
 [![codecov.io](http://codecov.io/github/clld/clld-glottologfamily-plugin/coverage.svg?branch=master)](http://codecov.io/github/clld/clld-glottologfamily-plugin?branch=master)
-[![PyPI](https://img.shields.io/pypi/v/clld-cognacy-plugin.svg)](https://pypi.python.org/pypi/clld-cognacy-plugin)
+[![PyPI](https://img.shields.io/pypi/v/clld-glottologfamily-plugin.svg)](https://pypi.python.org/pypi/clld-glottologfamily-plugin)
 
 
 ## Usage
