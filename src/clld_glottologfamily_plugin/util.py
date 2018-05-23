@@ -1,6 +1,7 @@
 from __future__ import unicode_literals
 from itertools import cycle
 
+import os
 from six import next
 
 from clld.web.icon import ORDERED_ICONS, MapMarker
@@ -40,6 +41,9 @@ def load_families(data,
     :param data:
     :return:
     """
+    if not os.path.exists(glottolog_repos) or glottlog_repos is None:
+        raise ValueError(glottog_repos)
+
     icons = cycle([getattr(i, 'name', i) for i in icons
                    if getattr(i, 'name', i) != isolates_icon])
     languoids_by_code = Glottolog(glottolog_repos).languoids_by_code()
