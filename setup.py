@@ -32,6 +32,7 @@ setup(
         'test': [
             'pytest>=3.1',
             'pytest-mock',
+            'pytest-clld',
             'mock',
             'coverage>=4.2',
             'pytest-cov',

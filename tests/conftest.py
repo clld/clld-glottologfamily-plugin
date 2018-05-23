@@ -7,7 +7,8 @@ import pytest
 from clld.db.meta import DBSession, VersionedDBSession, Base, CustomModelMixin
 from clld.db.models import common
 from clld.web.datatables.language import Languages
-from clld.tests.util import ExtendedTestApp
+# from clld.tests.util import ExtendedTestApp
+from pytest_clld._app import ExtendedTestApp
 from clld_glottologfamily_plugin.models import Family, HasFamilyMixin
 from clld_glottologfamily_plugin.datatables import MacroareaCol, FamilyLinkCol
 
