@@ -6,6 +6,8 @@ from clld_glottologfamily_plugin.models import Family
 from clld_glottologfamily_plugin.interfaces import IFamily
 from clld_glottologfamily_plugin.datatables import Familys
 
+__version__ = '3.0.0'
+
 
 def includeme(config):
     config.register_resource('family', Family, IFamily, with_index=True)

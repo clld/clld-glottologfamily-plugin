@@ -1,21 +1,38 @@
 Releasing clld-glottologfamily-plugin
 =====================================
 
-- Do platform test via tox (making sure statement coverage is at 100%):
+- Do platform test via tox:
 ```
 tox -r
 ```
 
-- Change setup.py version to the new version number.
-
-- Bump version number:
+- Make sure flake8 passes:
 ```
-git commit -a -m"bumped version number"
+flake8 src
+```
+
+- Update the version number, by removing the trailing `.dev0` in:
+  - `setup.py`
+  - `src/clld_glottologfamily_plugin/__init__.py`
+
+- Create the release commit:
+```shell
+git commit -a -m "release <VERSION>"
 ```
 
 - Create a release tag:
 ```
-git tag -a v0.2 -m"first version to be released on pypi"
+git tag -a v<VERSION> -m"<VERSION> release"
+```
+
+- Release to PyPI:
+```shell
+rm dist/*
+python setup.py sdist
+twine upload dist/*
+rm dist/*
+python setup.py bdist_wheel
+twine upload dist/*
 ```
 
 - Push to github:
@@ -24,10 +41,13 @@ git push origin
 git push --tags
 ```
 
-- Make sure your system Python has ``setuptools-git`` installed and release to
-  PyPI:
+- Increment version number and append `.dev0` to the version number for the new development cycle:
+  - `src/clld_glottologfamily_plugin/__init__.py`
+  - `setup.py`
+
+- Commit/push the version change:
+```shell
+git commit -a -m "bump version for development"
+git push origin
 ```
-rm dist/*
-python setup.py sdist bdist_wheel
-twine upload dist/*
-```
+
