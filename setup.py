@@ -6,9 +6,10 @@ setup(
     description='clld-glottologfamily-plugin',
     classifiers=[
         "Programming Language :: Python",
-        "Programming Language :: Python :: 2.7",
         "Programming Language :: Python :: 3",
         "Programming Language :: Python :: 3.4",
+        "Programming Language :: Python :: 3.5",
+        "Programming Language :: Python :: 3.6",
         "Framework :: Pyramid",
         "Topic :: Internet :: WWW/HTTP",
         "Topic :: Internet :: WWW/HTTP :: WSGI :: Application",
@@ -25,12 +26,12 @@ setup(
         'clld>=3.3.3',
         'sqlalchemy',
         'zope.interface',
-        'pyglottolog>=0.3.1',
+        'pyglottolog>=2.0',
     ],
     extras_require={
         'dev': ['flake8', 'wheel', 'twine'],
         'test': [
-            'pytest>=3.1',
+            'pytest>=3.6',
             'pytest-mock',
             'pytest-clld',
             'mock',

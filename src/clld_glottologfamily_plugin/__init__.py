@@ -1,5 +1,3 @@
-from __future__ import unicode_literals
-
 from clld.web.adapters.rdf import Rdf, RdfIndex
 from clld.web.adapters.geojson import GeoJson
 from clld.web.maps import Map

@@ -1,5 +1,3 @@
-from __future__ import unicode_literals
-
 import sqlalchemy as sa
 from pyramid import config
 import pytest
@@ -67,5 +65,12 @@ def testapp():
     DBSession.remove()
     VersionedDBSession.remove()
     wsgi_app = main()
-    db()
+    Base.metadata.bind = DBSession.bind
+    Base.metadata.create_all()
+
+    DBSession.add(common.Dataset(id='1', name='test app', domain='example.org'))
+    family = Family(id='f', name='family', description='desc', jsondata=dict(icon=1))
+    DBSession.add(LanguageWithFamily(id='l1', family=family))
+    DBSession.add(LanguageWithFamily(id='l2'))
+    DBSession.add(LanguageWithFamily(id='abcd1236'))
     yield ExtendedTestApp(wsgi_app)

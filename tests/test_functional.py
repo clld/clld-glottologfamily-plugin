@@ -1,6 +1,4 @@
-from __future__ import unicode_literals
-
-from pyglottolog.objects import Macroarea, Level
+from pyglottolog.config import Macroarea, LanguoidLevel
 from clld.scripts.util import Data
 from clld.db.meta import DBSession
 from clld_glottologfamily_plugin.models import Family
@@ -44,13 +42,13 @@ def test_load_families(mocker, engine, db, language_with_family):
     class _L(object):
         latitude = 1.0
         longitude = 1.0
-        macroareas = [Macroarea.pacific]
+        macroareas = [Macroarea('pacific', 'Papunesia', '', None)]
 
     class Isolate(_L):
         id = 'abcd1236'
         name = 'isolate'
         iso = None
-        level = Level.language
+        level = LanguoidLevel(1, 'language', '')
         lineage = []
 
     class Languoid(_L):
@@ -63,7 +61,7 @@ def test_load_families(mocker, engine, db, language_with_family):
         id = 'abcd1234'
         iso = 'abc'
         name = 'family'
-        level = Level.family
+        level = LanguoidLevel(2, 'family', '')
         lineage = []
 
     class Glottolog(mocker.Mock):
