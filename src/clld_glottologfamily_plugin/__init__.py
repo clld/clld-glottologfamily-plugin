@@ -6,7 +6,7 @@ from clld_glottologfamily_plugin.models import Family
 from clld_glottologfamily_plugin.interfaces import IFamily
 from clld_glottologfamily_plugin.datatables import Familys
 
-__version__ = '3.0.1.dev0'
+__version__ = '3.1.0'
 
 
 def includeme(config):
