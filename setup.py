@@ -34,7 +34,7 @@ setup(
         'dev': ['flake8', 'wheel', 'twine'],
         'test': [
             'attrs>=19.2',
-            'pytest>=3.6',
+            'pytest>=5.4',
             'pytest-mock',
             'pytest-clld',
             'mock',
