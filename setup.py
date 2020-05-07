@@ -1,8 +1,9 @@
 from setuptools import setup, find_packages
 
+
 setup(
     name='clld-glottologfamily-plugin',
-    version='3.1.1.dev0',
+    version='4.0.0',
     description='clld-glottologfamily-plugin',
     classifiers=[
         "Programming Language :: Python",
@@ -10,6 +11,7 @@ setup(
         "Programming Language :: Python :: 3.5",
         "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
+        "Programming Language :: Python :: 3.8",
         "Framework :: Pyramid",
         "Topic :: Internet :: WWW/HTTP",
         "Topic :: Internet :: WWW/HTTP :: WSGI :: Application",
@@ -23,7 +25,7 @@ setup(
     include_package_data=True,
     zip_safe=False,
     install_requires=[
-        'clld>=3.3.3',
+        'clld>=7.0',
         'sqlalchemy',
         'zope.interface',
         'pyglottolog>=2.0',

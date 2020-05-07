@@ -1,5 +1,5 @@
 from pyglottolog.config import Macroarea, LanguoidLevel
-from clld.scripts.util import Data
+from clld.cliutil import Data
 from clld.db.meta import DBSession
 from clld_glottologfamily_plugin.models import Family
 from clld_glottologfamily_plugin.datatables import FamilyCol
@@ -36,48 +36,21 @@ def test_FamilyCol(engine, db, mocker, language_with_family):
     assert q.filter(col.search('f')).order_by(col.order()).all()
 
 
-def test_load_families(mocker, engine, db, language_with_family):
+def test_load_families(language_with_family, glottolog_repos, engine, db):
     from clld_glottologfamily_plugin.util import load_families
 
-    class _L(object):
-        latitude = 1.0
-        longitude = 1.0
-        macroareas = [Macroarea('pacific', 'Papunesia', '', None)]
-
-    class Isolate(_L):
-        id = 'abcd1236'
-        name = 'isolate'
-        iso = None
-        level = LanguoidLevel(1, 'language', '')
-        lineage = []
-
-    class Languoid(_L):
-        id = 'abcd1235'
-        iso = 'abc'
-        name = 'language'
-        lineage = [('n', 'abcd1234', '')]
-
-    class TopLevelFamily(_L):
-        id = 'abcd1234'
-        iso = 'abc'
-        name = 'family'
-        level = LanguoidLevel(2, 'family', '')
-        lineage = []
-
-    class Glottolog(mocker.Mock):
-        def languoids_by_code(self):
-            return dict(
-                l1=Languoid(),
-                abcd1236=Isolate(),
-                abcd1234=TopLevelFamily(),
-                abc=TopLevelFamily())
-
-    mocker.patch('clld_glottologfamily_plugin.util.Glottolog', Glottolog)
-    load_families(Data(), DBSession.query(language_with_family), strict=False)
+    load_families(
+        Data(),
+        DBSession.query(language_with_family),
+        strict=False,
+        glottolog_repos=glottolog_repos,
+    )
     load_families(
         Data(),
         [('abc', l) for l in DBSession.query(language_with_family)],
-        strict=False)
+        strict=False,
+        glottolog_repos=glottolog_repos,
+    )
 
 
 def test_load_families2(mocker, engine, db, language_with_family):

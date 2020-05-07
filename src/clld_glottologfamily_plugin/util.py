@@ -1,7 +1,7 @@
-from itertools import cycle
+import itertools
 
 from clld.web.icon import ORDERED_ICONS, MapMarker
-from clld.scripts.util import add_language_codes
+from clld.cliutil import add_language_codes
 from clld.interfaces import ILanguage
 from clld.db.models.common import IdentifierType, Identifier
 
@@ -37,8 +37,8 @@ def load_families(data,
     :return:
     """
     api = Glottolog(glottolog_repos)
-    icons = cycle([getattr(i, 'name', i) for i in icons
-                   if getattr(i, 'name', i) != isolates_icon])
+    icons = itertools.cycle(
+        [getattr(i, 'name', i) for i in icons if getattr(i, 'name', i) != isolates_icon])
     languoids_by_code = api.languoids_by_code()
     for language in languages:
         if isinstance(language, (tuple, list)) and len(language) == 2:
@@ -51,7 +51,7 @@ def load_families(data,
         gl_family = None
         if gl_language:
             if not gl_language.lineage:
-                if gl_language.level == api.languoid_levels.family:
+                if gl_language.level.id == api.languoid_levels.family.id:
                     # Make sure top-level families are not treated as isolates!
                     gl_family = gl_language
             else:

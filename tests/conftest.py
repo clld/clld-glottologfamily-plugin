@@ -1,13 +1,20 @@
+import pathlib
+
 import sqlalchemy as sa
 from pyramid import config
 import pytest
 
-from clld.db.meta import DBSession, VersionedDBSession, Base, CustomModelMixin
+from clld.db.meta import DBSession, Base, CustomModelMixin
 from clld.db.models import common
 from clld.web.datatables.language import Languages
 from pytest_clld._app import ExtendedTestApp
 from clld_glottologfamily_plugin.models import Family, HasFamilyMixin
 from clld_glottologfamily_plugin.datatables import MacroareaCol, FamilyLinkCol
+
+
+@pytest.fixture()
+def glottolog_repos():
+    return pathlib.Path(__file__).parent / 'repos'
 
 
 class LanguageWithFamily(CustomModelMixin, common.Language, HasFamilyMixin):
@@ -45,6 +52,7 @@ def db():
     DBSession.add(LanguageWithFamily(id='l1', family=family))
     DBSession.add(LanguageWithFamily(id='l2'))
     DBSession.add(LanguageWithFamily(id='abcd1236'))
+    DBSession.add(LanguageWithFamily(id='abcd1234'))
     return DBSession
 
 
@@ -63,7 +71,6 @@ def testapp():
         return cfg.make_wsgi_app()
 
     DBSession.remove()
-    VersionedDBSession.remove()
     wsgi_app = main()
     Base.metadata.bind = DBSession.bind
     Base.metadata.create_all()
