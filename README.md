@@ -4,7 +4,7 @@
 [Glottolog](http://glottolog.org) to a *clld* app to allow for better navigation and 
 visualization.
 
-[![Build Status](https://travis-ci.org/clld/clld-glottologfamily-plugin.svg?branch=master)](https://travis-ci.org/clld/clld-glottologfamily-plugin)
+[![Build Status](https://github.com/clld/clld-glottologfamily-plugin/workflows/tests/badge.svg)](https://github.com/clld/clld-glottologfamily-plugin/actions?query=workflow%3Atests)
 [![codecov.io](http://codecov.io/github/clld/clld-glottologfamily-plugin/coverage.svg?branch=master)](http://codecov.io/github/clld/clld-glottologfamily-plugin?branch=master)
 [![PyPI](https://img.shields.io/pypi/v/clld-glottologfamily-plugin.svg)](https://pypi.python.org/pypi/clld-glottologfamily-plugin)
 
