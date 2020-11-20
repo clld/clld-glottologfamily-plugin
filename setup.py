@@ -28,6 +28,8 @@ setup(
         'clld>=7.0',
         'sqlalchemy',
         'zope.interface',
+        'pybtex<0.23; python_version < "3.6"',
+        'pybtex; python_version > "3.5"',
         'pyglottolog>=2.0',
     ],
     extras_require={
