@@ -2,12 +2,12 @@ Releasing clld-glottologfamily-plugin
 =====================================
 
 - Do platform test via tox:
-```
+```shell
 tox -r
 ```
 
 - Make sure flake8 passes:
-```
+```shell
 flake8 src
 ```
 
@@ -29,15 +29,12 @@ git tag -a v<VERSION> -m"<VERSION> release"
 ```shell
 python setup.py clean --all
 rm dist/*
-python setup.py sdist
-twine upload dist/*
-rm dist/*
-python setup.py bdist_wheel
+python -m build -n
 twine upload dist/*
 ```
 
 - Push to github:
-```
+```shell
 git push origin
 git push --tags
 ```
@@ -51,4 +48,3 @@ git push --tags
 git commit -a -m "bump version for development"
 git push origin
 ```
-
