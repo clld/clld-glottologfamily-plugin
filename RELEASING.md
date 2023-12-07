@@ -12,7 +12,7 @@ flake8 src
 ```
 
 - Update the version number, by removing the trailing `.dev0` in:
-  - `setup.py`
+  - `setup.cfg`
   - `src/clld_glottologfamily_plugin/__init__.py`
 
 - Create the release commit:
@@ -41,7 +41,7 @@ git push --tags
 
 - Increment version number and append `.dev0` to the version number for the new development cycle:
   - `src/clld_glottologfamily_plugin/__init__.py`
-  - `setup.py`
+  - `setup.cfg`
 
 - Commit/push the version change:
 ```shell
