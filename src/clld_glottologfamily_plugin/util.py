@@ -1,9 +1,16 @@
+"""
+Utilities to load Glottolog data etc.
+"""
 import itertools
+import pathlib
+from collections.abc import Iterable, Sequence
+from typing import Union, Optional
 
 from clld.web.icon import ORDERED_ICONS, MapMarker
-from clld.cliutil import add_language_codes
+from clld.cliutil import add_language_codes, Data
+from clld.web.icon import Icon
 from clld.interfaces import ILanguage
-from clld.db.models.common import IdentifierType, Identifier
+from clld.db.models.common import IdentifierType, Identifier, Language
 
 from pyglottolog.api import Glottolog
 
@@ -15,19 +22,19 @@ ISOLATES_ICON = 'cff6600'
 
 class LanguageByFamilyMapMarker(MapMarker):
     def get_icon(self, ctx, req):
-        if ILanguage.providedBy(ctx):
+        if ILanguage.providedBy(ctx):  # pylint: disable=E1120
             if ctx.family:
                 return ctx.family.jsondata['icon']
             return req.registry.settings.get('clld.isolates_icon', ISOLATES_ICON)
-        return super(LanguageByFamilyMapMarker, self).get_icon(ctx, req)
+        return super().get_icon(ctx, req)
 
 
-def load_families(data,
-                  languages,
-                  glottolog_repos=None,
-                  strict=True,
-                  icons=ORDERED_ICONS,
-                  isolates_icon=ISOLATES_ICON):
+def load_families(data: Data,
+                  languages: Iterable[Union[tuple, Language]],
+                  glottolog_repos: Optional[pathlib.Path] = None,
+                  strict: bool = True,
+                  icons: Sequence[Icon] = ORDERED_ICONS,
+                  isolates_icon: str = ISOLATES_ICON):
     """Add Family objects to a database and update Language object from Glottolog.
 
     Family information is retrieved from Glottolog based on the id attribute of a

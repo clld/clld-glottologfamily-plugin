@@ -40,6 +40,7 @@ def engine():
     DBSession.bind = sa.create_engine('sqlite://')
     yield DBSession
     DBSession.remove()
+    DBSession.close()
 
 
 @pytest.fixture

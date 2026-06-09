@@ -1,3 +1,6 @@
+"""
+Column implementations for DataTables.
+"""
 from sqlalchemy import null
 
 from clld.db.meta import DBSession
@@ -34,15 +37,15 @@ class FamilyCol(Col):
         kw['choices'].insert(0, ('isolate', '--none--'))
         Col.__init__(self, dt, name, **kw)
 
-    def order(self):
+    def order(self):  # pylint: disable=C0116
         return Family.name
 
-    def search(self, qs):
+    def search(self, qs):  # pylint: disable=C0116
         if qs == 'isolate':
             return self._col == null()
         return Family.id == qs
 
-    def format(self, item):
+    def format(self, item):  # pylint: disable=C0116
         item = self.get_obj(item)
         if item.family:
             label = link(self.dt.req, item.family) if self._link else item.family.name
@@ -57,12 +60,12 @@ class FamilyLinkCol(FamilyCol):
 
 
 class GlottologUrlCol(Col):
-    def format(self, item):
+    def format(self, item):  # pylint: disable=C0116
         return external_link(item.description, label=item.id)
 
 
 class Familys(DataTable):
-    def col_defs(self):
+    def col_defs(self):  # pylint: disable=C0116
         return [
             IdCol(self, 'id'),
             LinkCol(self, 'name'),

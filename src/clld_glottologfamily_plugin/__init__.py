@@ -1,3 +1,6 @@
+"""
+Add support for language families based on Glottolog to clld apps.
+"""
 from clld.web.adapters.rdf import Rdf, RdfIndex
 from clld.web.adapters.geojson import GeoJson
 from clld.web.maps import Map
@@ -9,7 +12,7 @@ from clld_glottologfamily_plugin.datatables import Familys
 __version__ = '4.1.1.dev0'
 
 
-def includeme(config):
+def includeme(config):  # pylint: disable=C0116
     config.register_resource('family', Family, IFamily, with_index=True)
     config.registry.settings['mako.directories'].append(
         'clld_glottologfamily_plugin:templates')
@@ -24,7 +27,7 @@ def includeme(config):
             fmt.mimetype,
             fmt.extension,
             'family/rdf.mako',
-            {'name': 'RDF serialized as %s' % fmt.name, 'rdflibname': fmt.name}])
+            {'name': f'RDF serialized as {fmt.name}', 'rdflibname': fmt.name}])
     config.register_adapters([[IFamily] + spec for spec in specs])
     config.register_adapter(GeoJson, IFamily)
     config.register_map('family', Map)
