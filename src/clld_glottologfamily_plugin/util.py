@@ -30,7 +30,7 @@ class LanguageByFamilyMapMarker(MapMarker):
 
 
 def load_families(data: Data,  # pylint: disable=R0913,R0917
-                  languages: Iterable[tuple | list | Language],
+                  languages: Iterable[tuple[str, Language] | Language],
                   glottolog_repos: pathlib.Path | None = None,
                   strict: bool = True,
                   icons: Sequence[Icon] = ORDERED_ICONS,
@@ -39,9 +39,6 @@ def load_families(data: Data,  # pylint: disable=R0913,R0917
 
     Family information is retrieved from Glottolog based on the id attribute of a
     language. This id must be either a glottocode or an ISO 639-3 code.
-
-    :param data:
-    :return:
     """
     def copy_attrs(from_, to_, *attrs: str):
         for attr in attrs:
@@ -55,7 +52,8 @@ def load_families(data: Data,  # pylint: disable=R0913,R0917
         [getattr(i, 'name', i) for i in icons if getattr(i, 'name', i) != isolates_icon])
     languoids_by_code = api.languoids_by_code()
     for language in languages:
-        if isinstance(language, (tuple, list)) and len(language) == 2:
+        if isinstance(language, tuple):
+            assert len(language) == 2 and isinstance(language[0], str)
             code, language = language
         else:
             code = language.id
