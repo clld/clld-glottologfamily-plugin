@@ -11,7 +11,7 @@
   ```
 
 - Update the version number, by removing the trailing `.dev0` in:
-  - `setup.cfg`
+  - `pyproject.toml`
   - `src/clld_glottologfamily_plugin/__init__.py`
 
 - Create the release commit:
@@ -40,7 +40,7 @@ git push --tags
 
 - Increment version number and append `.dev0` to the version number for the new development cycle:
   - `src/clld_glottologfamily_plugin/__init__.py`
-  - `setup.cfg`
+  - `pyproject.toml`
 
 - Commit/push the version change:
 ```shell
