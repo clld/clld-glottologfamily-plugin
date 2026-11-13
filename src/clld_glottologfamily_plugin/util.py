@@ -1,10 +1,7 @@
-"""
-Utilities to load Glottolog data etc.
-"""
-import itertools
+"""Utilities to load Glottolog data etc."""
 import pathlib
+import itertools
 from collections.abc import Iterable, Sequence
-from typing import Union, Optional
 
 from clld.web.icon import ORDERED_ICONS, MapMarker
 from clld.cliutil import add_language_codes, Data
@@ -12,7 +9,10 @@ from clld.web.icon import Icon
 from clld.interfaces import ILanguage
 from clld.db.models.common import IdentifierType, Identifier, Language
 
-from pyglottolog.api import Glottolog
+try:
+    from pyglottolog.api import Glottolog
+except ImportError:  # pragma: no cover
+    Glottolog = None
 
 from clld_glottologfamily_plugin.models import Family
 
@@ -29,9 +29,9 @@ class LanguageByFamilyMapMarker(MapMarker):
         return super().get_icon(ctx, req)
 
 
-def load_families(data: Data,
-                  languages: Iterable[Union[tuple, Language]],
-                  glottolog_repos: Optional[pathlib.Path] = None,
+def load_families(data: Data,  # pylint: disable=R0913,R0917
+                  languages: Iterable[tuple | list | Language],
+                  glottolog_repos: pathlib.Path | None = None,
                   strict: bool = True,
                   icons: Sequence[Icon] = ORDERED_ICONS,
                   isolates_icon: str = ISOLATES_ICON):
@@ -43,6 +43,13 @@ def load_families(data: Data,
     :param data:
     :return:
     """
+    def copy_attrs(from_, to_, *attrs: str):
+        for attr in attrs:
+            if getattr(to_, attr) is None:
+                setattr(to_, attr, getattr(from_, attr))
+
+    if Glottolog is None:
+        raise ImportError('Package must be installed with [initdb] extra.')  # pragma: no cover
     api = Glottolog(glottolog_repos)
     icons = itertools.cycle(
         [getattr(i, 'name', i) for i in icons if getattr(i, 'name', i) != isolates_icon])
@@ -67,9 +74,7 @@ def load_families(data: Data,
                 gl_language.macroareas[0].name if gl_language.macroareas else None
             add_language_codes(
                 data, language, gl_language.iso, glottocode=gl_language.id)
-            for attr in 'latitude', 'longitude', 'name':
-                if getattr(language, attr) is None:
-                    setattr(language, attr, getattr(gl_language, attr))
+            copy_attrs(gl_language, language, 'latitude', 'longitude', 'name')
 
         if gl_family:
             family = data['Family'].get(gl_family.id)
@@ -81,5 +86,5 @@ def load_families(data: Data,
                     name=gl_family.name,
                     description=Identifier(
                         name=gl_family.id, type=IdentifierType.glottolog.value).url(),
-                    jsondata=dict(icon=next(icons)))
+                    jsondata={'icon': next(icons)})
             language.family = family

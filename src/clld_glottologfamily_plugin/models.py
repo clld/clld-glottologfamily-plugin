@@ -1,6 +1,4 @@
-"""
-Schema objects for the plugin.
-"""
+"""Schema objects for the plugin."""
 from zope.interface import implementer
 from sqlalchemy import (
     Column,
@@ -20,6 +18,7 @@ from clld_glottologfamily_plugin.interfaces import IFamily
 @implementer(IFamily)
 class Family(Base, IdNameDescriptionMixin):
     """A Family table."""
+
     @property
     def url(self):  # pylint: disable=C0116
         return self.description
@@ -27,6 +26,7 @@ class Family(Base, IdNameDescriptionMixin):
 
 class HasFamilyMixin:
     """Adds a family relationship."""
+
     macroarea = Column(Unicode)
 
     @declared_attr

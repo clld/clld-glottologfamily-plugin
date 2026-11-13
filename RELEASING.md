@@ -1,15 +1,14 @@
-Releasing clld-glottologfamily-plugin
-=====================================
+# Releasing clld-glottologfamily-plugin
 
 - Do platform test via tox:
-```shell
-tox -r
-```
+  ```shell
+  tox -r
+  ```
 
-- Make sure flake8 passes:
-```shell
-flake8 src
-```
+- Make sure ruff passes:
+  ```shell
+  ruff check src
+  ```
 
 - Update the version number, by removing the trailing `.dev0` in:
   - `setup.cfg`

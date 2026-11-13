@@ -1,6 +1,4 @@
-"""
-Column implementations for DataTables.
-"""
+"""Column implementations for DataTables."""
 from sqlalchemy import null
 
 from clld.db.meta import DBSession
@@ -12,7 +10,9 @@ from clld_glottologfamily_plugin.models import Family
 
 
 class MacroareaCol(Col):
-    def __init__(self, dt, name, language_cls, **kw):
+    """Column displaying the macroarea assigned to a language."""
+
+    def __init__(self, dt, name, language_cls, **kw):  # noqa: D107
         self._col = getattr(language_cls, 'macroarea')
         kw['choices'] = get_distinct_values(self._col)
         self.language_cls = language_cls
@@ -29,11 +29,14 @@ class MacroareaCol(Col):
 
 
 class FamilyCol(Col):
-    def __init__(self, dt, name, language_cls, link=False, **kw):
+    """Column displaying the family."""
+
+    def __init__(self, dt, name, language_cls, link=False, **kw):  # noqa: D107
         self._link = link
         self._col = getattr(language_cls, 'family')
         kw['choices'] = [
-            (f.id, f.name) for f in DBSession.query(Family).order_by(Family.name)]
+            (f.id, f.name) for f in
+            DBSession.query(Family).order_by(Family.name)]  # pylint: disable=E1101
         kw['choices'].insert(0, ('isolate', '--none--'))
         Col.__init__(self, dt, name, **kw)
 
@@ -55,16 +58,22 @@ class FamilyCol(Col):
 
 
 class FamilyLinkCol(FamilyCol):
-    def __init__(self, dt, name, language_cls, **kw):
+    """Column displaying a family as link to the family page."""
+
+    def __init__(self, dt, name, language_cls, **kw):  # noqa: D107
         FamilyCol.__init__(self, dt, name, language_cls, link=True, **kw)
 
 
 class GlottologUrlCol(Col):
+    """Column displaying a Glottocode as link to Glottolog."""
+
     def format(self, item):  # pylint: disable=C0116
         return external_link(item.description, label=item.id)
 
 
 class Familys(DataTable):
+    """DataTable listing families."""
+
     def col_defs(self):  # pylint: disable=C0116
         return [
             IdCol(self, 'id'),

@@ -1,3 +1,114 @@
 [build-system]
-requires = ["setuptools"]
+requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
+
+[project]
+name = "clld-glottologfamily-plugin"
+version = "4.1.1.dev0"
+description = "A clld plugin adding language family information from Glottolog to clld apps."
+readme = "README.md"
+requires-python = ">=3.10"
+license = {text = "Apache-2.0"}
+authors = [
+    {name = "Robert Forkel", email = "dlce.rdm@eva.mpg.de"}
+]
+keywords = ["web", "pyramid", "clld"]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "Natural Language :: English",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Programming Language :: Python :: 3.15",
+    "License :: OSI Approved :: Apache Software License",
+]
+dependencies = [
+    "clld>=7.0",
+    "sqlalchemy",
+    "zope.interface",
+]
+
+[project.urls]
+Homepage = "https://github.com/clld/clld-glottologfamily-plugin"
+
+[project.optional-dependencies]
+initdb = [
+    "pyglottolog",
+]
+dev = [
+    "ruff",
+    "wheel",
+    "build",
+    "twine",
+]
+test = [
+    "pytest>=5",
+    "pytest-mock",
+    "pytest-cov",
+    "pytest-clld",
+    "coverage>=4.2",
+    "webtest",
+]
+
+[tool.setuptools]
+zip-safe = false
+include-package-data = true
+license-files = ["LICENSE"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+clld_glottologfamily_plugin = ["templates/*"]
+
+[tool.ruff]
+line-length = 100
+exclude = [".tox"]
+
+[tool.ruff.lint]
+# E/F match default Flake8; D enables pydocstyle checks (since you ignored specific D rules)
+select = ["E", "F", "D"]
+ignore = [
+    "E711", # Comparison to `None` should be `cond is None` (needed for SQLAlchemy filters)
+    "E712", # Comparison to `True` should be `cond is True` (needed for SQLAlchemy filters)
+    "D100", # Missing docstring in public module
+    "D101", # Missing docstring in public class
+    "D102", # Missing docstring in public method
+    "D103", # Missing docstring in public function
+    "D301", # Use `r"""` if any backslashes in a docstring
+    "D203",
+    "D213",
+]
+
+[tool.pytest.ini_options]
+minversion = "5.0"
+testpaths = ["tests"]
+addopts = ["--cov"]
+filterwarnings = [
+    "ignore::sqlalchemy.exc.SAWarning",
+    "ignore::sqlalchemy.exc.RemovedIn20Warning",
+]
+
+[tool.coverage.run]
+source = [
+    "clld_glottologfamily_plugin",
+    "tests",
+]
+
+[tool.coverage.report]
+show_missing = true
+skip_covered = true
+
+[tool.tox]
+requires = ["tox>=4.19"]
+env_list = ["py310", "py311", "py312", "py313", "py314", "py315"]
+skip_missing_interpreters = true
+
+[tool.tox.env_run_base]
+extras = ["test", "initdb"]
+commands = [["pytest", { replace = "posargs", default = [], extend = true }]]

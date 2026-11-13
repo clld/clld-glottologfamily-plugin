@@ -1,6 +1,4 @@
-"""
-Add support for language families based on Glottolog to clld apps.
-"""
+"""Add support for language families based on Glottolog to clld apps."""
 from clld.web.adapters.rdf import Rdf, RdfIndex
 from clld.web.adapters.geojson import GeoJson
 from clld.web.maps import Map
