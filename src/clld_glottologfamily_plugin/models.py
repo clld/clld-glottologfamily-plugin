@@ -30,9 +30,9 @@ class HasFamilyMixin:
     macroarea = Column(Unicode)
 
     @declared_attr
-    def family_pk(cls):  # pylint: disable=E0213,C0116
+    def family_pk(cls):  # noqa: N805
         return Column(Integer, ForeignKey('family.pk'))
 
     @declared_attr
-    def family(cls):  # pylint: disable=E0213,C0116
+    def family(cls):  # noqa: N805
         return relationship(Family, backref='languages')

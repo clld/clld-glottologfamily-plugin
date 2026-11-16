@@ -29,7 +29,7 @@ class LanguageByFamilyMapMarker(MapMarker):
         return super().get_icon(ctx, req)
 
 
-def load_families(data: Data,  # pylint: disable=R0913,R0917
+def load_families(data: Data,  # noqa: PLR0913,PLR0917,C901
                   languages: Iterable[tuple[str | None, Language] | Language],
                   glottolog_repos: pathlib.Path | None = None,
                   strict: bool = True,
@@ -53,7 +53,7 @@ def load_families(data: Data,  # pylint: disable=R0913,R0917
     languoids_by_code = api.languoids_by_code()
     for language in languages:
         if isinstance(language, tuple):
-            assert len(language) == 2, language
+            assert len(language) == 2, language  # noqa: PLR2004
             if language[0] is None:
                 continue  # pragma: no cover
             assert isinstance(language[0], str), language
