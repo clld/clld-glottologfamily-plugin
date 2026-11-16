@@ -63,7 +63,7 @@ include-package-data = true
 where = ["src"]
 
 [tool.setuptools.package-data]
-clld_glottologfamily_plugin = ["templates/*"]
+clld_glottologfamily_plugin = ["templates/**/*"]
 
 [tool.ruff]
 line-length = 100
