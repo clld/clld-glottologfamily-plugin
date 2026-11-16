@@ -4,10 +4,10 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "clld-glottologfamily-plugin"
-version = "5.0.1.dev0"
+version = "5.0.1"
 description = "A clld plugin adding language family information from Glottolog to clld apps."
 readme = "README.md"
-requires-python = ">=3.10"
+requires-python = ">=3.11"
 license = "Apache-2.0"
 license-files = ["LICENSE"]
 authors = [
@@ -20,7 +20,6 @@ classifiers = [
     "Natural Language :: English",
     "Operating System :: OS Independent",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
@@ -97,9 +96,10 @@ skip_covered = true
 
 [tool.tox]
 requires = ["tox>=4.19"]
-env_list = ["py310", "py311", "py312", "py313", "py314", "py315"]
+env_list = ["py311", "py312", "py313", "py314", "py315"]
 skip_missing_interpreters = true
 
 [tool.tox.env_run_base]
 extras = ["test", "initdb"]
 commands = [["pytest", { replace = "posargs", default = [], extend = true }]]
+package = "wheel"
